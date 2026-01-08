@@ -18,6 +18,19 @@ spec:
         image: nginx:stable
         ports:
         - containerPort: 80
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          periodSeconds: 5
+
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/conf.d
@@ -25,6 +38,8 @@ spec:
       - name: nginx-config
         configMap:
           name: nginx-config
+
+        
 
 
 ---
