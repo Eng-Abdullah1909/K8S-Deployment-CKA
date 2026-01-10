@@ -52,6 +52,14 @@ spec:
             cpu: "500m"
             memory: "256Mi"  
 
+        volumeMounts:
+        - name: app-storage
+          mountPath: /data
+
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
 
 
 
