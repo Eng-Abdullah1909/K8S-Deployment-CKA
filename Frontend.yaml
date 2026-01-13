@@ -13,6 +13,20 @@ spec:
       labels:
         app: frontend
     spec:
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - frontend
+              topologyKey: kubernetes.io/hostname
+
       containers:
       - name: nginx
         image: nginx:stable
