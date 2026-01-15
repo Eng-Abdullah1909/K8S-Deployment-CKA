@@ -1,0 +1,51 @@
+frontend:
+  image: nginx:stable
+  port: 80
+
+  service:
+    type: NodePort
+    port: 80
+
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+
+backend:
+  image: gcr.io/google-samples/hello-go-gke:1.0
+  port: 80
+
+  serviceAccountName: backend-sa
+  pvcName: app-pvc
+
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+
+  service:
+    port: 80
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+
+  hpa:
+    minReplicas: 2
+    maxReplicas: 10
+    cpuUtilization: 60
+
+ingress:
+  enabled: true
+  className: nginx
+  host: app.local
+
+persistence:
+  accessMode: ReadWriteOnce
+  size: 1Gi

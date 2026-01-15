@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-nginx-config
+data:
+  default.conf: |
+    upstream backend_upstream {
+        server {{ .Release.Name }}-backend:{{ .Values.backend.port }};
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://backend_upstream;
+        }
+    }
